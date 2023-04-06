@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	//tao connection tai port 5672 voi id va password
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	if err != nil {
 		fmt.Println(err)
@@ -17,14 +18,14 @@ func main() {
 	defer conn.Close()
 
 	fmt.Println("successfully connected to RabbitMQ")
-
+	//tao channel trong queue
 	ch, err := conn.Channel()
 	if err != nil {
 		fmt.Println(err)
 		panic(err)
 	}
 	defer ch.Close()
-
+	//khai bao queue ten la Test
 	q, err := ch.QueueDeclare(
 		"Test",
 		false,
@@ -41,6 +42,7 @@ func main() {
 
 	fmt.Println(q)
 	counter := 0
+	//publish message vao queue
 	for {
 		err = ch.Publish(
 			"",
